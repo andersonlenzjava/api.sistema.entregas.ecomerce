@@ -3,7 +3,7 @@ package api.sistema.entregas.ecomerce.domain.endereco;
 import jakarta.persistence.*;
 
 @Entity
-public class endereco {
+public class Endereco {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
