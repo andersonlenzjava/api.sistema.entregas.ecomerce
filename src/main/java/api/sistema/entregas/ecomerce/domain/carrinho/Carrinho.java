@@ -1,7 +1,7 @@
 package api.sistema.entregas.ecomerce.domain.carrinho;
 
-import api.sistema.entregas.ecomerce.domain.cliente.Cliente;
 import api.sistema.entregas.ecomerce.domain.produto.Produto;
+import api.sistema.entregas.ecomerce.domain.usuario.Usuario;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,7 +19,7 @@ public class Carrinho {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    private Cliente cliente;
+    private Usuario usuario;
     @OneToOne
     private List<Produto> produtos;
 

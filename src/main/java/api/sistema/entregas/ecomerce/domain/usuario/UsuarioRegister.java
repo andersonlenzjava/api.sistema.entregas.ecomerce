@@ -6,7 +6,9 @@ import jakarta.validation.constraints.NotBlank;
 
 public record UsuarioRegister(
 
+        @NotBlank
         String nome,
+        @NotBlank
         String cpf,
         @Valid
         @NotBlank
