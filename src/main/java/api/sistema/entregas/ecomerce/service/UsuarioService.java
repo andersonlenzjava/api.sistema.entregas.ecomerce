@@ -1,9 +1,5 @@
 package api.sistema.entregas.ecomerce.service;
 
-import api.sistema.entregas.ecomerce.domain.produto.Produto;
-import api.sistema.entregas.ecomerce.domain.produto.ProdutoRegister;
-import api.sistema.entregas.ecomerce.domain.produto.ProdutoRepository;
-import api.sistema.entregas.ecomerce.domain.produto.ProdutoResponse;
 import api.sistema.entregas.ecomerce.domain.usuario.Usuario;
 import api.sistema.entregas.ecomerce.domain.usuario.UsuarioRegister;
 import api.sistema.entregas.ecomerce.domain.usuario.UsuarioRepository;

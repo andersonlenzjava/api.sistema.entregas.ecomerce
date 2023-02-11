@@ -22,14 +22,14 @@ public class EnderecoController {
     private EnderecoService enderecoService;
 
     @GetMapping
-    public Page<EnderecoResponse> listarEnderecos(
+    public Page<EnderecoResponse> listarEndereco(
             @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10)
             Pageable paginacao) {
         return enderecoService.listarEndereco(paginacao);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EnderecoResponse> buscarEnderecos(@PathVariable Long id) {
+    public ResponseEntity<EnderecoResponse> buscarEndereco(@PathVariable Long id) {
         return enderecoService.buscarEndereco(id);
     }
 

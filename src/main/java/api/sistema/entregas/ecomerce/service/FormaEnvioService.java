@@ -1,11 +1,5 @@
 package api.sistema.entregas.ecomerce.service;
 
-import api.sistema.entregas.ecomerce.controller.EnderecoController;
-import api.sistema.entregas.ecomerce.domain.carrinho.CarrinhoRegister;
-import api.sistema.entregas.ecomerce.domain.carrinho.CarrinhoResponse;
-import api.sistema.entregas.ecomerce.domain.endereco.Endereco;
-import api.sistema.entregas.ecomerce.domain.endereco.EnderecoRepository;
-import api.sistema.entregas.ecomerce.domain.endereco.EnderecoResponse;
 import api.sistema.entregas.ecomerce.domain.formaEnvio.FormaEnvio;
 import api.sistema.entregas.ecomerce.domain.formaEnvio.FormaEnvioRegister;
 import api.sistema.entregas.ecomerce.domain.formaEnvio.FormaEnvioRepository;
@@ -17,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.Optional;
 
 @Service
@@ -35,7 +30,7 @@ public class FormaEnvioService {
     public ResponseEntity<FormaEnvioResponse> buscarFormaEnvio(Long id) {
         Optional<FormaEnvio> formaEnvioOptional = formaEnvioRepository.findById(id);
         if (formaEnvioOptional.isPresent()) {
-            return ResponseEntity.ok(FormaEnvioResponse.converterUmEndereco(formaEnvioOptional.get()));
+            return ResponseEntity.ok(FormaEnvioResponse.converterUmFormaEnvio(formaEnvioOptional.get()));
         }
         return ResponseEntity.notFound().build();
     }
@@ -43,12 +38,27 @@ public class FormaEnvioService {
     public ResponseEntity<FormaEnvioResponse> cadastrarFormaEnvio(
             FormaEnvioRegister formaEnvioRegister, UriComponentsBuilder uriBuilder) throws Exception {
 
+        FormaEnvio formaEnvio = formaEnvioRegister.converter();
+        formaEnvioRepository.save(formaEnvio);
 
+        URI uri = uriBuilder.path("/formaEnvio/{id}").buildAndExpand(formaEnvio.getId()).toUri();
+        return ResponseEntity.created(uri).body(new FormaEnvioResponse(formaEnvio));
     }
 
     public ResponseEntity<FormaEnvioResponse> atualizarFormaEnvio(Long id, FormaEnvioRegister formaEnvioRegister) {
+        Optional<FormaEnvio> formaEnvioOptional = formaEnvioRepository.findById(id);
+        if (formaEnvioOptional.isPresent()) {
+            FormaEnvio formaEnvio = formaEnvioOptional.get();
 
+            formaEnvio.setDistancia(formaEnvioRegister.distancia());
+            formaEnvio.setNome(formaEnvioRegister.nome());
+            formaEnvio.setValorBase(formaEnvioRegister.valorBase());
 
+            formaEnvioRepository.save(formaEnvio);
+
+            return ResponseEntity.ok(new FormaEnvioResponse(formaEnvio));
+        }
+        return ResponseEntity.notFound().build();
     }
 
     public ResponseEntity<?> deletarFormaEnvio(Long id) {

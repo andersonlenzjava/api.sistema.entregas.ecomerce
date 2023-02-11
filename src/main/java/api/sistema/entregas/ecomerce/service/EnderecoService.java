@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.Optional;
 
 @Service
@@ -42,12 +43,26 @@ public class EnderecoService {
     public ResponseEntity<EnderecoResponse> cadastrarEndereco(
             EnderecoRegister enderecoRegister, UriComponentsBuilder uriBuilder) throws Exception {
 
+        Endereco endereco = enderecoRegister.converter();
+        enderecoRepository.save(endereco);
 
+        URI uri = uriBuilder.path("/endereco/{id}").buildAndExpand(endereco.getId()).toUri();
+        return ResponseEntity.created(uri).body(new EnderecoResponse(endereco));
     }
 
     public ResponseEntity<EnderecoResponse> atualizarEndereco(Long id, EnderecoRegister enderecoRegister) {
+        Optional<Endereco> enderecoOptional = enderecoRepository.findById(id);
+        if(enderecoOptional.isPresent()){
+            Endereco endereco = enderecoOptional.get();
+            endereco.setCep(enderecoRegister.cep());
+            endereco.setRua(enderecoRegister.rua());
+            endereco.setCep(enderecoRegister.cep());
 
+            enderecoRepository.save(endereco);
 
+            return ResponseEntity.ok(new EnderecoResponse(endereco));
+        }
+        return ResponseEntity.notFound().build();
     }
 
     public ResponseEntity<?> deletarEndereco(Long id) {
